@@ -41,15 +41,12 @@
 			});
 			
 			function funcEdit(ID,mess){
-				$('#emailReceiverNew').val(null);
-				$('#emailReceiverID').val(null);
 				$('#modalEdit').modal('show');
 				$('#emailReceiverNew').val(mess);
 				$('#emailReceiverID').val(ID);
 			}
 			
 			function funcDelete(ID){
-				$('#emailReceiverDeleteID').val(null);
 				$('#deleteModal').modal('show');
 				$('#emailReceiverDeleteID').val(ID);
 			}
@@ -62,7 +59,7 @@
     	<br>
         <h3>Email Config</h3> 
     </div>
-    <div id="email-nav" th:replace="~{/fragments/app-fragments :: nav-default}">
+    <div id="email-nav" th:replace="~{fragments/app-fragments :: nav-default}">
          Nav
     </div>
     <div id="email-main-content">
@@ -214,7 +211,7 @@
 		  </div>
 		</div>
     </div>
-    <div id="email-footer" th:replace="~{/fragments/app-fragments :: copyright}">
+    <div id="email-footer" th:replace="~{fragments/app-fragments :: copyright}">
         Footer
     </div>
 </body>

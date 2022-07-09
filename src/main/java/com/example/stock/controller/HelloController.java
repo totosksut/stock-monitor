@@ -2,8 +2,6 @@ package com.example.stock.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.stock.model.Prop;
-import com.example.stock.model.PropType;
 import com.example.stock.service.EmailService;
-import com.example.stock.service.StockFileService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +23,6 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class HelloController {
 	
-	@Autowired
-	private StockFileService stockFileService;
 	
 	@Autowired
 	private EmailService emailService;
@@ -52,6 +46,7 @@ public class HelloController {
     
     @RequestMapping("/stockFile")
     public String stockFile() {
+    	logger.info("stockFile");
     	try {
     		//List<PropType> listPropType = stockFileService.findAllPropType();
     		//for(PropType row : listPropType) {
@@ -97,17 +92,24 @@ public class HelloController {
     }
     
     @RequestMapping("/saveEmailSender")
-    public String saveEmailSender(HttpServletRequest request , HttpServletResponse response) {
+    public String saveEmailSender(
+    		 @RequestParam(value = "emailSender", required = false) String emailSender,
+    		 @RequestParam(value = "emailSenderId", required = false) String emailSenderId,
+    		 @RequestParam(value = "emailSenderPass", required = false) String emailSenderPass,
+    		 @RequestParam(value = "emailSenderPassID", required = false) String emailSenderPassID
+    		) {
     	
     	try {
     		
-    		String emailSender = request.getParameter("emailSender");
-    		String emailSenderId = request.getParameter("emailSenderID");
+			/*
+			 * String emailSender = request.getParameter("emailSender"); String
+			 * emailSenderId = request.getParameter("emailSenderID");
+			 * 
+			 * String emailSenderPass = request.getParameter("emailSenderPass"); String
+			 * emailSenderPassID = request.getParameter("emailSenderPassID");
+			 */
     		
-    		String emailSenderPass = request.getParameter("emailSenderPass");
-    		String emailSenderPassID = request.getParameter("emailSenderPassID");
-    		
-    		if(emailSenderId.isEmpty() || emailSenderPassID.isEmpty()) {
+    		if(emailSenderId==null || emailSenderPassID==null) {
     			Prop objEmailSender = new Prop();
     			objEmailSender.setPropName("E_MAIL_SENDER");
     			objEmailSender.setPropPath(emailSender);
@@ -143,13 +145,19 @@ public class HelloController {
     }
     
     @RequestMapping("/saveEmailReceiver")
-    public String saveEmailReceiver(HttpServletRequest request , HttpServletResponse response) {
+    public String saveEmailReceiver(
+    			@RequestParam(value = "emailReceiver", required = false) String emailReceiver,
+    			@RequestParam(value = "emailReceiverID", required = false) String emailReceiverId,
+    			@RequestParam(value = "emailReceiverNew", required = false) String emailReceiverNew
+    		) {
     	
     	try {
     		
-    		String emailReceiver = request.getParameter("emailReceiver");
-    		String emailReceiverId = request.getParameter("emailReceiverID");
-    		String emailReceiverNew = request.getParameter("emailReceiverNew");
+			/*
+			 * String emailReceiver = request.getParameter("emailReceiver"); String
+			 * emailReceiverId = request.getParameter("emailReceiverID"); String
+			 * emailReceiverNew = request.getParameter("emailReceiverNew");
+			 */
     		
     		
     		if(emailReceiverId==null) {
@@ -179,11 +187,13 @@ public class HelloController {
     }
     
     @RequestMapping("/deleteEmailReceiver")
-    public String deleteEmailReceiver(HttpServletRequest request , HttpServletResponse response) {
+    public String deleteEmailReceiver(
+    			@RequestParam(value = "emailReceiverDeleteID", required = false) String emailReceiverId
+    		) {
     	
     	try {
     		
-    		String emailReceiverId = request.getParameter("emailReceiverDeleteID");
+    		//String emailReceiverId = request.getParameter("emailReceiverDeleteID");
     		emailService.removeEmail(Long.valueOf(emailReceiverId));
     		
     		
