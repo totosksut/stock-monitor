@@ -6,7 +6,9 @@ import com.example.stock.model.Prop;
 
 public interface EmailService {
 
-	List<Prop> findEmailAll() throws Exception;
+	List<Prop> findEmailSender() throws Exception;
+	
+	List<Prop> findEmailReceiverAll() throws Exception;
 	
 	Prop getEmail(Long stockId) throws Exception;
 	

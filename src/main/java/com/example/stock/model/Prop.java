@@ -2,6 +2,7 @@ package com.example.stock.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -10,14 +11,14 @@ import javax.persistence.Table;
 public class Prop {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long propId;
 	
 	private String propName;
 	
 	private String propPath;
 	
-	private String propType;
+	private Long propType;
 	
 	private String propCode;
 
@@ -45,11 +46,11 @@ public class Prop {
 		this.propPath = propPath;
 	}
 
-	public String getPropType() {
+	public Long getPropType() {
 		return propType;
 	}
 
-	public void setPropType(String propType) {
+	public void setPropType(Long propType) {
 		this.propType = propType;
 	}
 
