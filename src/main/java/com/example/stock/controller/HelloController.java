@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.stock.model.Prop;
 import com.example.stock.service.EmailService;
+import com.example.stock.service.StockFileService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,9 @@ public class HelloController {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private StockFileService stockFileService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
 
@@ -45,19 +49,67 @@ public class HelloController {
     }
     
     @RequestMapping("/stockFile")
-    public String stockFile() {
+    public String stockFile(Model model) {
     	logger.info("stockFile");
     	try {
-    		//List<PropType> listPropType = stockFileService.findAllPropType();
-    		//for(PropType row : listPropType) {
-    		//	logger.info(row.getPropName());
-    		//}
-    		
+    		List<Prop> listStockFile = stockFileService.findStockFileAll();
+    		model.addAttribute("listStockFIle",listStockFile);
     	}catch(Exception e) {
     		e.printStackTrace();
     		logger.error(e.getMessage());
     	}
         return "stockFile";
+    }
+    
+    @RequestMapping("/saveStockFile")
+    public String saveStockFile(
+    		 @RequestParam(value = "groupName", required = false) String groupName,
+    		 @RequestParam(value = "pathFile", required = false) String pathFile,
+    		 @RequestParam(value = "groupNameNew", required = false) String groupNameNew,
+    		 @RequestParam(value = "pathFileNew", required = false) String pathFileNew,
+    		 @RequestParam(value = "stockFileId", required = false) String stockFileId
+    		) {
+    	
+    	try {
+    		
+    		if(stockFileId==null) {
+    			Prop objStockFile = new Prop();
+    			objStockFile.setPropName(groupName);
+    			objStockFile.setPropPath(pathFile);
+    			objStockFile.setPropType(3L);
+    			
+    			stockFileService.saveStockFile(objStockFile);
+    		}else {
+    			Prop objStockFile = stockFileService.getStockFile(Long.valueOf(stockFileId));
+    			objStockFile.setPropName(groupNameNew);
+    			objStockFile.setPropPath(pathFileNew);
+    			
+    			stockFileService.saveStockFile(objStockFile);
+    		}
+    		
+    		
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		logger.error(e.getMessage());
+    	}
+    	
+        return "redirect:/stockFile";
+    }
+    
+    @RequestMapping("/deleteStockFile")
+    public String deleteStockFile(@RequestParam(value = "stockIdDelete", required = false) String stockIdDelete) {
+    	
+    	try {
+
+    		stockFileService.removeStockFile(Long.valueOf(stockIdDelete));
+    		
+    		
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		logger.error(e.getMessage());
+    	}
+    	
+        return "redirect:/stockFile";
     }
     
     @RequestMapping("/email")
@@ -205,8 +257,41 @@ public class HelloController {
         return "redirect:/email";
     }
     
+    
     @RequestMapping("/dbLocation")
-    public String dbLocation() {
+    public String dbLocation(Model model) {
+    	logger.info("dbLocation");
+    	try {
+    		List<Prop> listDBF = stockFileService.findDBFLocationAll();
+    		model.addAttribute("listDBF",listDBF);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		logger.error(e.getMessage());
+    	}
         return "dbLocation";
+    }
+    
+    @RequestMapping("/savedbLocation")
+    public String savedbLocation(
+    		 @RequestParam(value = "groupName", required = false) String groupName,
+    		 @RequestParam(value = "pathFile", required = false) String pathFile,
+    		 @RequestParam(value = "dbfId", required = false) String dbfId
+    		) {
+    	
+    	try {
+    		
+    		Prop objDBF = stockFileService.getDBFLocation(Long.valueOf(dbfId));
+    		//objDBF.setPropName(groupName);
+    		objDBF.setPropPath(pathFile);
+			
+			stockFileService.saveDBFLocation(objDBF);
+    		
+    		
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		logger.error(e.getMessage());
+    	}
+    	
+        return "redirect:/dbLocation";
     }
 }

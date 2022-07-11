@@ -39,4 +39,42 @@ public class StockFileDAO {
 			throw e;
 		}
 	}
+	
+	
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteStockFile(Long id ) throws Exception {
+		try {
+			propRepo.deleteById(id);
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	public List<Prop> getStockFileList() throws Exception {
+		try {
+			return propRepo.findByPropType(3L);
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	public List<Prop> getDBFLocationList() throws Exception {
+		try {
+			return propRepo.findByPropType(2L);
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	public Prop getStockFIle(Long id) throws Exception{
+		try {
+			return propRepo.findByPropId(id);
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }

@@ -18,14 +18,12 @@ public class StockFileServiceImpl implements StockFileService{
 
 	@Override
 	public List<Prop> findStockFileAll() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return stockFileDAO.getStockFileList();
 	}
 
 	@Override
 	public Prop getStockFile(Long stockId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return stockFileDAO.getStockFIle(stockId);
 	}
 
 	@Override
@@ -36,14 +34,34 @@ public class StockFileServiceImpl implements StockFileService{
 
 	@Override
 	public void removeStockFile(Long stockId) throws Exception {
-		// TODO Auto-generated method stub
-		
+		stockFileDAO.deleteStockFile(stockId);
 	}
 
 	@Override
 	public List<PropType> findAllPropType() throws Exception {
-		// TODO Auto-generated method stub
 		return stockFileDAO.getAllPropType();
+	}
+
+	@Override
+	public Prop getDBFLocation(Long propId) throws Exception {
+		return stockFileDAO.getStockFIle(propId);
+	}
+
+	@Override
+	public void saveDBFLocation(Prop prop) throws Exception {
+		stockFileDAO.saveStockFile(prop);
+		
+	}
+
+	@Override
+	public void removeDBFLocation(Long propId) throws Exception {
+		stockFileDAO.deleteStockFile(propId);
+		
+	}
+
+	@Override
+	public List<Prop> findDBFLocationAll() throws Exception {
+		return stockFileDAO.getDBFLocationList();
 	}
 
 }

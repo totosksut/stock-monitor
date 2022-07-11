@@ -16,4 +16,12 @@ public interface StockFileService {
 	void removeStockFile(Long stockId) throws Exception;
 	
 	List<PropType> findAllPropType() throws Exception;
+	
+	Prop getDBFLocation(Long propId) throws Exception;
+	
+	void saveDBFLocation(Prop prop) throws Exception;
+	
+	void removeDBFLocation(Long propId) throws Exception;
+	
+	List<Prop> findDBFLocationAll() throws Exception;
 }

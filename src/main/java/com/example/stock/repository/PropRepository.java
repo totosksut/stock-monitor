@@ -14,4 +14,5 @@ public interface  PropRepository extends JpaRepository<Prop, Long>{
 	
 	List<Prop> findByPropType(Long propType);
 	
+	Prop findByPropNameAndPropType(String propName,Long propType);
 }

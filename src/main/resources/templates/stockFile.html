@@ -13,22 +13,43 @@
 <head>
     <title>Stock File</title>
     <th:block id="products-static-resources">  
-       <!-- <script type="text/javascript" src="../static/products.js" th:src="@{/products.js}"></script> -->
        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 		<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 		<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 		<script th:src="@{js/datatables.min.js}"></script>
-       <script type="text/javascript">
-		$(document).ready(function () {
-			$('#example').DataTable();
-		});
-	</script>
+        <script type="text/javascript" th:inline="javascript">
+			$(document).ready(function () {
+				
+				$('#example').DataTable();
+				
+				$('#addBtn').click(function(){
+					$('#pathFile').val(null);
+					$('#groupName').val(null);
+					$('#modalAdd').modal('show');
+				});
+				
+			});
+			
+			function funcEdit(ID,mess,groupName){
+				$('#modalEdit').modal('show');
+				$('#groupNameNew').val(groupName);
+				$('#pathFileNew').val(mess);
+				$('#stockFileId').val(ID);
+			}
+			
+			function funcDelete(ID){
+				$('#deleteModal').modal('show');
+				$('#stockIdDelete').val(ID);
+			}
+			
+			
+		</script>
     </th:block>
 </head>
 <body>
     <div id="products-header">
     	<br>
-        <h3>Stock File Monitor <button type="button" class="btn btn-primary">Add + </button></h3> 
+        <h3>Stock File Monitor <button type="button" id="addBtn" class="btn btn-primary">Add + </button></h3> 
     </div>
     <div id="products-nav" th:replace="~{fragments/app-fragments :: nav-default}">
          Nav
@@ -46,27 +67,121 @@
 			            </tr>
 			        </thead>
 			        <tbody>
-			            <tr>
-							<td style="text-align: center">1</td>
-							<td>File1</td>
-							<td>D:/project/check_stock/30062022/stock/final version/check_stock/file1.xls</td>
+			            <tr th:each ="contact : ${listStockFIle}">
+							<td style="text-align: center" th:text="${contactStat.index+1}"></td>
+							<td th:text="${contact.propName}"></td>
+							<td th:text="${contact.propPath}"></td>
 							<td style="text-align: center">
-								<button type="submit" class="btn btn-info">Edit</button>&nbsp;
-								<button type="reset" class="btn btn-danger">Delete</button>
-							</td>
-						</tr>
-			            <tr>
-							<td style="text-align: center">2</td>
-							<td>File2</td>
-							<td>D:/project/check_stock/30062022/stock/final version/check_stock/file2.xls</td>
-							<td style="text-align: center">
-								<button type="submit" class="btn btn-info">Edit</button>&nbsp;
-								<button type="reset" class="btn btn-danger">Delete</button>
+								<button type="button" th:onclick="funcEdit([[${contact.propId}]],[[${contact.propPath}]],[[${contact.propName}]])" class="btn btn-info">Edit</button>&nbsp;
+					            <button type="button" th:onclick="'javascript:funcDelete(' + ${contact.propId} + ')'" class="btn btn-danger">Delete</button>
 							</td>
 						</tr>
 			        </tbody>
 			    </table>
 			</div>
+		</div>
+		<div class="modal fade bd-example-modal-lg" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+		    	<form  th:action="@{/saveStockFile}" method="post">
+			      	  <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalLabel">Add Path Stock</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				        <div class="row">
+			    			<div class="col-sm-12">
+			    				<div class="form-group row">
+								    <label for="staticEmail" class="col-sm-2 col-form-label">Description :</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" required="required" id="groupName" th:name="groupName"  >
+								    </div>
+							   </div>
+			    			</div>
+			    		</div>
+				        <div class="row">
+			    			<div class="col-sm-12">
+			    				<div class="form-group row">
+								    <label for="staticEmail" class="col-sm-2 col-form-label">Path :</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" required="required" id="pathFile" th:name="pathFile"  >
+								    </div>
+							   </div>
+			    			</div>
+			    		</div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				        <button type="submit" class="btn btn-success">Save</button>
+				      </div>
+				</form>
+		    </div>
+		  </div>
+		</div>
+		<div class="modal fade bd-example-modal-lg" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+		    	<form  th:action="@{/saveStockFile}" method="post">
+			      	  <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalLabel">Edit Path Stock</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				        <div class="row">
+			    			<div class="col-sm-12">
+			    				<div class="form-group row">
+								    <label for="staticEmail" class="col-sm-2 col-form-label">Description :</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" required="required" id="groupNameNew" th:name="groupNameNew"  >
+								    </div>
+							   </div>
+			    			</div>
+			    		</div>
+				        <div class="row">
+			    			<div class="col-sm-12">
+			    				<div class="form-group row">
+								    <label for="staticEmail" class="col-sm-2 col-form-label">Path :</label>
+								    <div class="col-sm-10">
+								      <input type="text" class="form-control" required="required" id="pathFileNew" th:name="pathFileNew"  >
+								      <input type="hidden" id="stockFileId" th:name="stockFileId"/>
+								    </div>
+							   </div>
+			    			</div>
+			    		</div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				        <button type="submit" class="btn btn-success">Save</button>
+				      </div>
+				</form>
+		    </div>
+		  </div>
+		</div>
+		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <form  th:action="@{/deleteStockFile}" method="post">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">Alert</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			      	<input type="hidden" id="stockIdDelete" th:name="stockIdDelete"  />
+			        Are you sure to delete?
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			        <button type="submit" class="btn btn-danger">Delete</button>
+			      </div>
+			    </div>
+		    </form>
+		  </div>
 		</div>
     </div>
     <div id="products-footer" th:replace="~{fragments/app-fragments :: copyright}">
